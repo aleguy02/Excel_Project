@@ -1,44 +1,26 @@
-from openpyxl import Workbook
-from openpyxl import load_workbook
+"""Goal: extract key data from sample workbook (my favorite foods) and import it into my personal worksheet"""
+
+from openpyxl import Workbook, load_workbook
+from openpyxl.utils import get_column_letter
+from collections import namedtuple
+
+wb = load_workbook('hello.xlsx')
+ws = wb.active
+
+categories = ['Category', 'FoodItem', 'Measure', 'Calories', 'Protein', 'Fat', 'Carbs', 'Fiber']
+# this named tuple will let me add the associated values of each food item into its corresponding category easily.
+Categories = namedtuple('Categories', categories)
+
+Nutella = Categories('Sweets', 'Spread, chocolate hazelnut', '30mL', 203, 2, 11, 23, 2.0)  # Set of nutella's data
+
+n = 0
+for col in range(1, 9):  # cells A1-H1 are filled with the values from the 'categories' list
+    char = get_column_letter(col)
+    ws[char + '1'].value = categories[n]
+    n += 1
 
 # Create a workbook object
 # wb = Workbook()
 
-#load existing spreadsheet
-wb = load_workbook('hello.xlsx')
 
-# create an active worksheet
-ws = wb.active
-
-# set a variable
-# num = ws['A2'].value
-# letter = ws['B2'].value
-
-# Print something from the spreadsheet
-# print(num, letter)
-
-# Grab a whole column
-"""
-num_list = []
-column_a = ws['A']
-for cell in column_a:
-    #print(f'{cell.value}\n')
-    num_list.append(cell.value)
-
-print(f'{ws["A1"].value} in column A are {num_list}')
-"""
-
-def sum(_list: list, total=0):
-    for value in _list:
-        total += int(value)
-    return total
-
-num_list = []
-range = ws['A2':'A10']
-
-for tuple in range:
-    for cell in tuple:
-        num_list.append(cell.value)
-
-print(f"{ws['A1'].value} in column A are {num_list}")
-print(f"Sum of {ws['A1'].value} in column A are {sum(num_list)}")
+wb.save('hello.xlsx')  # saves workbook changes
